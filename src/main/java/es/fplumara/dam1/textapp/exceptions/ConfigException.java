@@ -1,4 +1,9 @@
 package es.fplumara.dam1.textapp.exceptions;
 
-public class ConfigException {
+public class ConfigException extends RuntimeException{
+
+    public ConfigException(String mensaje){
+        super(mensaje);
+    }
+
 }
