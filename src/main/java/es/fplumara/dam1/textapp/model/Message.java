@@ -1,8 +1,10 @@
 package es.fplumara.dam1.textapp.model;
 
+import es.fplumara.dam1.textapp.files.TextStore;
+
 import java.util.List;
 
-public class Message {
+public class Message{
 
     String texto;
 
