@@ -1,11 +1,9 @@
 package es.fplumara.dam1.textapp.config;
 
 import es.fplumara.dam1.textapp.exceptions.ConfigException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-
 import static java.lang.String.valueOf;
 
 public class AppConfig {
@@ -23,10 +21,7 @@ public class AppConfig {
         storeType = props.getProperty("store.type");
         messagesFile = props.getProperty("messages.file");
         messagesMaxLength = props.getProperty("messages.maxLength");
-
-
         System.out.println(props.getProperty("logs.enabled", "true"));
-
     }
 
     public String getStoreType () {
@@ -39,7 +34,7 @@ public class AppConfig {
 
     public Integer getMaxLength (){
         try {
-            return Integer.valueOf(String.valueOf(messagesMaxLength));
+            return Integer.parseInt(String.valueOf(messagesMaxLength));
         }catch(ConfigException e){
             return 0;
         }
