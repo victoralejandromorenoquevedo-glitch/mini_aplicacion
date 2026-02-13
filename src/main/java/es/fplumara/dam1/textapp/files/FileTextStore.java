@@ -2,9 +2,11 @@ package es.fplumara.dam1.textapp.files;
 
 import es.fplumara.dam1.textapp.config.AppConfig;
 import es.fplumara.dam1.textapp.model.Message;
-
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import java.nio.file.*;
 
 public class FileTextStore implements TextStore{
 
@@ -16,23 +18,23 @@ public class FileTextStore implements TextStore{
 
     @Override
     public void save(Message mensaje) {
+        Path path = Path.of(appConfig.getMessagesFile());
 
-        File ficheroSalida = new File(appConfig.getMessagesFile());
+        List<String> lineas = List.of(
+                "RESUMEN DE LOGS",
+                "--------------",
+                "Total errores: 3"
+        );
 
-        if (ficheroSalida.exists()){
-            Properties props = new Properties();
-            String messagesMaxLength = props.getProperty("messages.maxLength");
-            if (ficheroSalida.length() > Integer.parseInt(String.valueOf(messagesMaxLength))){
-                String textoMaximo = appConfig.getMessagesFile().substring(Integer.parseInt(String.valueOf(messagesMaxLength)));
-                ficheroSalida = new File(textoMaximo);
-            }
-        }
+        Files.write(path, lineas);
     }
 
 
     @Override
-    public String readAll() {
-        return "";
+    public String readAll() throws IOException {
+        Path path = Path.of("datos.txt");
+        String contenido = Files.readString(path);
+        return contenido;
     }
 
     @Override
