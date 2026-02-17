@@ -1,6 +1,7 @@
 package es.fplumara.dam1.textapp.files;
 
 import es.fplumara.dam1.textapp.config.AppConfig;
+import es.fplumara.dam1.textapp.exceptions.StoreException;
 import es.fplumara.dam1.textapp.model.Message;
 import java.io.File;
 import java.io.IOException;
@@ -17,29 +18,41 @@ public class FileTextStore implements TextStore{
     }
 
     @Override
-    public void save(Message mensaje) {
-        Path path = Path.of(appConfig.getMessagesFile());
+    public void save(Message mensaje){
+        try {
+            Path path = Path.of(appConfig.getMessagesFile());
+            if (mensaje.getTexto().length() <= appConfig.getMaxLength()) {
+                List<String> lineas = List.of(mensaje.getTexto().split("\\R"));
+                for (i = 0, i<= lineas.size(), i++){
 
-        List<String> lineas = List.of(
-                "RESUMEN DE LOGS",
-                "--------------",
-                "Total errores: 3"
-        );
-
-        Files.write(path, lineas);
+                }
+                Files.write(path, mensaje.getTexto().getBytes());
+            } else {
+                Files.write(path, mensaje.getTexto().substring(0, 199).getBytes());
+            }
+        }catch(IOException e){
+            throw new StoreException("Error de escritura del fichero");
+        }
     }
 
 
     @Override
-    public String readAll() throws IOException {
-        Path path = Path.of("datos.txt");
-        String contenido = Files.readString(path);
-        return contenido;
+    public String readAll(){
+        try {
+            Path path = Path.of(appConfig.getMessagesFile());
+            if (Files.readString(path).isEmpty())
+                return "";
+            else {
+                return Files.readString(path);
+            }
+        }catch (IOException e){
+            throw new RuntimeException("Error de lectura del fichero");
+        }
     }
 
     @Override
     public String readLast(Integer ultimasLineasOFilas) {
-        return "";
+
     }
 
 }

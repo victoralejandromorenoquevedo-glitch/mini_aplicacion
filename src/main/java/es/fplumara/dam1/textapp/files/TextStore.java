@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public interface TextStore {
 
-    void save(Message mensaje);
+    void save(Message mensaje) throws IOException;
 
     String readAll() throws IOException;
 
