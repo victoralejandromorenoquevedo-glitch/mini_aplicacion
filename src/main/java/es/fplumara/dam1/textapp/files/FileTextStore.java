@@ -3,6 +3,7 @@ package es.fplumara.dam1.textapp.files;
 import es.fplumara.dam1.textapp.config.AppConfig;
 import es.fplumara.dam1.textapp.exceptions.StoreException;
 import es.fplumara.dam1.textapp.model.Message;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -20,12 +21,9 @@ public class FileTextStore implements TextStore{
     @Override
     public void save(Message mensaje){
         try {
+            List<Object> mensajes = List.of(mensaje.getTimestampp() + " | " + mensaje.getNumeroPalabras() + " | " + mensaje.getTexto());
             Path path = Path.of(appConfig.getMessagesFile());
             if (mensaje.getTexto().length() <= appConfig.getMaxLength()) {
-                List<String> lineas = List.of(mensaje.getTexto().split("\\R"));
-                for (i = 0, i<= lineas.size(), i++){
-
-                }
                 Files.write(path, mensaje.getTexto().getBytes());
             } else {
                 Files.write(path, mensaje.getTexto().substring(0, 199).getBytes());
@@ -46,13 +44,20 @@ public class FileTextStore implements TextStore{
                 return Files.readString(path);
             }
         }catch (IOException e){
-            throw new RuntimeException("Error de lectura del fichero");
+            throw new StoreException("Error de lectura del fichero");
         }
     }
 
     @Override
-    public String readLast(Integer ultimasLineasOFilas) {
-
+    public String readLast(Integer ultimasLineas) {
+        try {
+            Path path = Path.of(appConfig.getMessagesFile());
+            List<String> lineas = List.of(Files.readString(path).split("\\R"));
+            List<String> lineasDeseadas = lineas.subList(ultimasLineas, lineas.size());
+            return lineasDeseadas.toString();
+        }catch (IOException e){
+            throw new StoreException("Error de lectura del fichero");
+        }
     }
 
 }

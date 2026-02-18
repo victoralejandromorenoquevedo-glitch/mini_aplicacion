@@ -10,6 +10,6 @@ public interface TextStore {
 
     String readAll() throws IOException;
 
-    String readLast(Integer ultimasLineasOFilas);
+    String readLast(Integer ultimasLineas);
     
 }
