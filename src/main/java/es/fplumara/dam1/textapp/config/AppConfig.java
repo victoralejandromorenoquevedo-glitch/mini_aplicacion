@@ -4,7 +4,6 @@ import es.fplumara.dam1.textapp.exceptions.ConfigException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import static java.lang.String.valueOf;
 
 public class AppConfig {
 
@@ -12,16 +11,17 @@ public class AppConfig {
     private String messagesFile;
     private String messagesMaxLength;
 
-    public AppConfig() throws IOException {
-        Properties props = new Properties();
-        try (InputStream in = getClass().getClassLoader().getResourceAsStream("config.properties")) {
-            if (in == null) throw new ConfigException("No existe el recurso config.properties");
+    public AppConfig() {
+        try {
+            Properties props = new Properties();
+            InputStream in = getClass().getClassLoader().getResourceAsStream("config.properties");
             props.load(in);
+            storeType = props.getProperty("store.type");
+            messagesFile = props.getProperty("messages.file");
+            messagesMaxLength = props.getProperty("messages.maxLength");
+        }catch (IOException e){
+            throw new ConfigException("Error de lectura de las propiedades del fichero");
         }
-        storeType = props.getProperty("store.type");
-        messagesFile = props.getProperty("messages.file");
-        messagesMaxLength = props.getProperty("messages.maxLength");
-        System.out.println(props.getProperty("logs.enabled", "true"));
     }
 
     public String getStoreType () {
@@ -33,11 +33,10 @@ public class AppConfig {
     }
 
     public Integer getMaxLength (){
-        try {
-            return Integer.parseInt(String.valueOf(messagesMaxLength));
-        }catch(ConfigException e){
-            return 0;
+        if (messagesMaxLength.isEmpty()){
+            return 200;
         }
+        return Integer.parseInt(messagesMaxLength);
     }
 
 }

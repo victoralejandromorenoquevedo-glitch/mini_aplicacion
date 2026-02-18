@@ -6,9 +6,9 @@ import java.io.IOException;
 
 public interface TextStore {
 
-    void save(Message mensaje) throws IOException;
+    void save(Message mensaje);
 
-    String readAll() throws IOException;
+    String readAll();
 
     String readLast(Integer ultimasLineas);
     

@@ -12,8 +12,6 @@ public class Message{
 
     Integer numeroPalabras;
 
-    List<String> palabras = List.of(texto.split(""));
-
     public String getTexto() {
         return texto;
     }
