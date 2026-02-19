@@ -5,16 +5,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class AppConfig {
+public class AppConfigCsv {
 
     private String storeType;
     private String messagesFile;
     private String messagesMaxLength;
 
-    public AppConfig() {
+    public AppConfigCsv() {
         try {
             Properties props = new Properties();
-            InputStream in = getClass().getClassLoader().getResourceAsStream("config.properties");
+            InputStream in = getClass().getClassLoader().getResourceAsStream("config_csv.properties");
             props.load(in);
             storeType = props.getProperty("store.type");
             messagesFile = props.getProperty("messages.file");
