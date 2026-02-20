@@ -14,6 +14,13 @@ public class Message{
     public Message(LocalDate timestamp, Integer numeroPalabras, String texto) {
         timestamp = LocalDate.now();
         this.timestamp = timestamp;
+        int contadorEspacios = 0;
+        for (int i = 0; i < texto.length(); i++){
+            if (texto.charAt(i) == ' '){
+                contadorEspacios++;
+            }
+        }
+        numeroPalabras = contadorEspacios + 1;
         this.numeroPalabras = numeroPalabras;
         this.texto = texto;
     }

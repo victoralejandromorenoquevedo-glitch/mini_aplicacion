@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class CsvTextStore implements TextStore{
             List <Message> mensajes = new ArrayList<>();
             for (CSVRecord r : parser) {
                 Message mensaje = new Message(
-                r.get("timestamp"),
+                LocalDate.parse(r.get("timestamp")),
                 Integer.parseInt(r.get("numeroPalabras")),
                 r.get("texto")
                 );
@@ -64,6 +65,28 @@ public class CsvTextStore implements TextStore{
 
     @Override
     public String readLast(Integer ultimasLineas) {
-        return "";
+        try {
+            Path path = Path.of(appConfigCsv.getMessagesFile());
+            Reader reader = Files.newBufferedReader(path);
+            CSVFormat format = CSVFormat.DEFAULT.builder()
+                    .setHeader()
+                    .setSkipHeaderRecord(true)
+                    .setTrim(true)
+                    .build();
+            CSVParser parser = format.parse(reader);
+            List <Message> mensajes = new ArrayList<>();
+            for (CSVRecord r : parser) {
+                Message mensaje = new Message(
+                        LocalDate.parse(r.get("timestamp")),
+                        Integer.parseInt(r.get("numeroPalabras")),
+                        r.get("texto")
+                );
+                mensajes.add(mensaje);
+            }
+            return mensajes.subList(ultimasLineas, mensajes.size()).toString();
+        }catch (IOException e){
+            throw new StoreException("Error de lectura del fichero");
+        }
     }
+
 }
